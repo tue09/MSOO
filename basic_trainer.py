@@ -163,24 +163,21 @@ class BasicTrainer:
                             if self.model_name == "NeuroMax":
                                 self.model.lambda_4 = lambda_t[3]
                 if self.use_MOO != 0:
-                    if epoch > self.epoch_threshold:
-                        loss_array = [value for key, value in rst_dict.items() if 'loss_x' in key]
-                        grad_array = [self._get_total_grad(loss_) for loss_ in loss_array]
+                    loss_array = [value for key, value in rst_dict.items() if 'loss_x' in key]
+                    grad_array = [self._get_total_grad(loss_) for loss_ in loss_array]
 
-                        if self.MOO_name == 'MoCo':
-                            adjusted_grad, alpha = moo_algorithm.apply(grad_array, loss_array)
-                        else:
-                            adjusted_grad, alpha = moo_algorithm.apply(grad_array)
-                        
-                        grad_pointer = 0
-                        for p in self.model.parameters():
-                            if p.requires_grad:
-                                num_params = p.numel()
-                                grad_slice = adjusted_grad[grad_pointer:grad_pointer + num_params]
-                                p.grad = grad_slice.view_as(p).clone()
-                                grad_pointer += num_params
+                    if self.MOO_name == 'MoCo':
+                        adjusted_grad, alpha = moo_algorithm.apply(grad_array, loss_array)
                     else:
-                        batch_loss.backward()
+                        adjusted_grad, alpha = moo_algorithm.apply(grad_array)
+                    
+                    grad_pointer = 0
+                    for p in self.model.parameters():
+                        if p.requires_grad:
+                            num_params = p.numel()
+                            grad_slice = adjusted_grad[grad_pointer:grad_pointer + num_params]
+                            p.grad = grad_slice.view_as(p).clone()
+                            grad_pointer += num_params
                 else:
                     batch_loss.backward()
                     adam_optimizer.step()
