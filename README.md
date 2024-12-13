@@ -21,7 +21,7 @@
 To run the model, use the command:
 
 ```bash
-python main.py --model <MODEL_NAME> --dataset <DATASET_NAME> --num_topics 50 --beta_temp 0.1 --num_groups 20 --epochs 500 --device cuda --lr 0.002 --use_pretrainWE --use_MOO <USE_MSOO> --MOO_name <MOO_METHOD> --learn 0 --coef_ 0.5
+python main.py --model <MODEL_NAME> --dataset <DATASET_NAME> --num_topics 50 --beta_temp 0.1 --num_groups 20 --weight_ECR 5 --alpha_ECR 20  --weight_GR 2  --alpha_GR 5  --weight_InfoNCE 50  --theta_temp 1.0  --DT_alpha 3.0 --TW_alpha 2.0 --epochs 500 --device cuda --lr 0.002 --use_pretrainWE --use_MOO <USE_MSOO> --MOO_name <MOO_METHOD> --learn 0 --coef_ 0.5
 ```
 
 ## Options:
